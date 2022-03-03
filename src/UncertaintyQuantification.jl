@@ -2,6 +2,7 @@ module UncertaintyQuantification
 
 using Accessors
 using Bootstrap
+using CovarianceEstimation
 using DataFrames
 using Dates
 using Dierckx
@@ -14,6 +15,7 @@ using Primes
 using QuasiMonteCarlo
 using Random
 using Reexport
+using Roots
 
 @reexport using Distributions
 
@@ -44,6 +46,8 @@ export UQModel
 export UQType
 
 # Structs
+export ContinuousDesignVariable
+export Constraint
 export ExternalModel
 export Extractor
 export GaussianCopula
@@ -66,6 +70,9 @@ export calc
 export count_rvs
 export dimensions
 export evaluate!
+export get_new_exponent
+export get_normalized_weights
+export get_covariance
 export gradient
 export gradient_in_standard_normal_space
 export mean
@@ -92,6 +99,10 @@ include("solvers/extractor.jl")
 include("models/externalmodel.jl")
 include("models/model.jl")
 include("models/polyharmonicspline.jl")
+
+include("optimization/abo.jl")
+include("optimization/constraints.jl")
+include("optimization/designvariables.jl")
 
 include("sensitivity/gradient.jl")
 

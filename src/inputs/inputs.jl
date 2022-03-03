@@ -27,7 +27,7 @@ function names(inputs::Array{<:UQInput})
     _names = Symbol[]
 
     for i in inputs
-        if i isa Parameter || i isa RandomVariable
+        if i isa Parameter || i isa RandomVariable || i isa ContinuousDesignVariable
             push!(_names, i.name)
         elseif i isa JointDistribution
             append!(_names, names(i))
