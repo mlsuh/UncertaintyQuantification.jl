@@ -1,9 +1,14 @@
 struct FORM
     n::Integer
     tol::Real
+    fdm::FiniteDifferencesMethod
 
-    function FORM(n::Integer=10, tol::Real=1e-3)
-        return new(n, tol)
+    function FORM(
+        n::Integer=10,
+        tol::Real=1e-3;
+        fdm::FiniteDifferencesMethod=CentralFiniteDifferences(3),
+    )
+        return new(n, tol, fdm)
     end
 end
 
@@ -25,6 +30,7 @@ function probability_of_failure(
     parameters =
         !isempty(deterministic_inputs) ? sample(deterministic_inputs, 1) : DataFrame()
 
+    α = Vector{Float64}(undef, length(random_names))
     β::Float64 = 0.0
     h₀::Float64 = Inf
 
@@ -34,7 +40,9 @@ function probability_of_failure(
         to_physical_space!(inputs, physical)
         physical = hcat(physical, parameters)
 
-        H = gradient_in_standard_normal_space(G, inputs, physical, :performance)
+        H = gradient_in_standard_normal_space(
+            G, inputs, physical, :performance; fdm=sim.fdm
+        )
 
         H = map(n -> H[n], random_names)
 
@@ -65,5 +73,6 @@ function probability_of_failure(
     to_physical_space!(inputs, dp)
 
     dp = (; zip(random_names, collect(dp[1, :]))...)
-    return pf, β, dp
+    α = (; zip(random_names, collect(α))...)
+    return pf, β, dp, α
 end
