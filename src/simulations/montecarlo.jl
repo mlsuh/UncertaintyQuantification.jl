@@ -39,16 +39,7 @@ end
 
 struct HaltonSampling <: AbstractQuasiMonteCarlo
     n::Integer
-    randomization::Symbol
-
-    function HaltonSampling(n::Integer, randomization::Symbol=:none)
-        randomization ∉ [:none] && error("type must be :none")
-        if n > 0
-            return new(n, randomization)
-        else
-            error("n must be greater than zero")
-        end
-    end
+    HaltonSampling(n) = n > 0 ? new(n) : error("n must be greater than zero")
 end
 
 struct LatinHypercubeSampling <: AbstractQuasiMonteCarlo
@@ -113,8 +104,14 @@ function qmc_samples(sim::FaureSampling, rvs::Integer)
 end
 
 function qmc_samples(sim::HaltonSampling, rvs::Integer)
-    samples = QuasiMonteCarlo.sample(sim.n, rvs, HaltonSample())
-    return randomize(sim, rvs > 1 ? samples : reshape(samples, 1, sim.n))
+    if sim.randomization == :randomizedhalton
+        return QuasiMonteCarlo(sim.n, rvs, RandomizedHaltonSample())
+    else #sim.randomization == :none
+        return QuasiMonteCarlo.sample(sim.n, rvs, HaltonSample())
+        #previously(without release of randomized halton in QMC.jl):
+        #samples = QuasiMonteCarlo.sample(sim.n, rvs, HaltonSample())
+        #return randomize(sim, rvs > 1 ? samples : reshape(samples, 1, sim.n))
+    end
 end
 
 function qmc_samples(sim::LatinHypercubeSampling, rvs::Integer)

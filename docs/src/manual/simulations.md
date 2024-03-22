@@ -2,16 +2,22 @@
 
 ## Monte Carlo
 
-## Quasi Monte Carlo
+## Quasi Monte Carlo 
 Quasi Monte Carlo (QMC), is method of producing samples similar to those generated via Monte Carlo (MC).
 The difference being, that QMC samples are generated deterministically in way to ensure they are evenly distributed across the sampling space, not forming clutters or voids as MC samples might.
-This makes QMC more efficient than MC for lots of applications since fewer samples are needed in order to produce a sufficient density of samples throughout.
-There are two types of QMC methods, digital nets and lattices.
-There are multiple ways of QMC-sampling, included here are Lattice Rule Sampling and the digital nets Sobol Sampling, Halton Sampling, Faure Sampling and Latin Haypercube Sampling.
+This makes QMC more efficient than MC for lots of applications since fewer samples are needed in order to produce a sufficient density of samples throughout. There are multiple ways of QMC-sampling which either are digital nets or lattices. [owenQuasiMonteCarlo2009](@cite)
+
+Included here are Lattice Rule Sampling and the digital nets Sobol Sampling, Halton Sampling, Faure Sampling and Latin Haypercube Sampling.
 
 However, being deterministic, these QMC samples are missing the properties related to randomness that MC samples have.
 To gain these properties it is possible to randomize QMC samples.
-There are several randomization methods, useful in different cases, depending on the QMC method in use.
+There are several randomization methods, useful in different cases, depending on the QMC method in use. [owenQuasiMonteCarlo2009](@cite)
 
 Implemented in this package are Owen-Scramble and Matousek-Scramble, two similar methods useful for Sobol and Faure Sampling aswell as Shift which can be used for Lattice Rule Sampling.
-There also is an algorithm for Halton Sampling, that constructs builds samples from the ground up as opposed to randomizing existing samples which is what the aforementioned methods do.
+There also is an algorithm for Halton Sampling, that constructs builds samples from the ground up as opposed to randomizing existing samples which is what the aforementioned methods do. [owenRandomizedHalton2017](@cite)
+
+To sample using one of these methods, simply create an instance of the corresponding struct with the desired parameters and then call the sample function with that structs instance. The parameters are `n::Integer` which is the number of samples, and `randomization::Symbol` which encodes the randomization method that should be used. The different possible symbols are: `:none`, `:matousekscramble`, `:owenscramble`, `:shift` and `:randomizedhalton`.
+Note that not all randomization methods are possible to use for all QMC-methods. 
+Also, if no `randomization`-symbol is given, the default will be used. This is `:matousekscramble` for `SobolSampling` and `FaureSampling`, `:shift` for `LatticeRuleSampling` and `randomizedhalton` for HaltonSampling. `LatinHypercubeSampling` is only used unrandomized and thus doesn't have the `randomization` parameter.
+
+When chosing `n`, bear in mind that for `SobolSampling` and `FaureSampling`, `n` must fit the base that is used for creating the respective sequence. For `SobolSampling` the base is always equal to 2 while it depends on the number of input-variables for `FaureSampling`. If `n` is not a power of the base, it will automatically be increased to the next power.
