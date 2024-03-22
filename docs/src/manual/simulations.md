@@ -2,6 +2,9 @@
 
 ## Monte Carlo
 
+The Monte-Carlo (MC) method is a method of sampling random numbers that dates back to 1777. The name was suggested by Nick Metropolis when MC was used while working on the Manhattan Project.
+It is used in Random Number Generators which often (as in this case) produce pseudo random numbers.
+
 ## Quasi Monte Carlo 
 Quasi Monte Carlo (QMC), is method of producing samples similar to those generated via Monte Carlo (MC).
 The difference being, that QMC samples are generated deterministically in way to ensure they are evenly distributed across the sampling space, not forming clutters or voids as MC samples might.
