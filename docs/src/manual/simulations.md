@@ -20,7 +20,27 @@ Implemented in this package are Owen-Scramble and Matousek-Scramble, two similar
 There also is an algorithm for Halton Sampling, that constructs builds samples from the ground up as opposed to randomizing existing samples which is what the aforementioned methods do. [owenRandomizedHalton2017](@cite)
 
 To sample using one of these methods, simply create an instance of the corresponding struct with the desired parameters and then call the sample function with that structs instance. The parameters are `n::Integer` which is the number of samples, and `randomization::Symbol` which encodes the randomization method that should be used. The different possible symbols are: `:none`, `:matousekscramble`, `:owenscramble`, `:shift` and `:randomizedhalton`.
-Note that not all randomization methods are possible to use for all QMC-methods. 
-Also, if no `randomization`-symbol is given, the default will be used. This is `:matousekscramble` for `SobolSampling` and `FaureSampling`, `:shift` for `LatticeRuleSampling` and `randomizedhalton` for HaltonSampling. `LatinHypercubeSampling` is only used unrandomized and thus doesn't have the `randomization` parameter.
+
+```@example QMC
+    using UncertaintyQuantification #hide
+    x = RandomVariable(Uniform(), :x)
+    qmc = LatinHypercubeSampling(100, :shift)
+    samples = sample(x, qmc)
+    nothing #hide
+```
+
+Note that not all randomization methods are possible to use for every QMC-method. 
+Also, if no `randomization`-symbol is given, the default will be used. This is `:matousekscramble` for `SobolSampling` and `FaureSampling`, `:shift` for `LatticeRuleSampling` and `randomizedhalton` for HaltonSampling. `LatinHypercubeSampling` is only used unrandomized and thus doesn't have the `randomization` parameter. Also, it is of course possible to directly create the struct inside the `sample`-call, enabling a more efficient version of the example above which looks like this:
+
+```@example QMC
+    x = RandomVariable(Uniform(), :x)
+    samples = sample(x, LatinHypercubeSampling(100))
+    nothing #hide
+```
 
 When chosing `n`, bear in mind that for `SobolSampling` and `FaureSampling`, `n` must fit the base that is used for creating the respective sequence. For `SobolSampling` the base is always equal to 2 while it depends on the number of input-variables for `FaureSampling`. If `n` is not a power of the base, it will automatically be increased to the next power.
+
+```@example QMC
+    x = RandomVariable(Uniform(), :x)
+    sample = SobolSampling(100)
+```
