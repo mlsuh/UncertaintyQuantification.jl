@@ -3,7 +3,7 @@
 ## Monte Carlo
 
 The Monte-Carlo (MC) method is a method of sampling random numbers that dates back to 1777. The name was suggested by Nick Metropolis when MC was used while working on the Manhattan Project.
-It is used in Random Number Generators which often (as in this case) produce pseudo random numbers.
+It is used in Random Number Generators which generally produce pseudo random numbers.
 
 ## Quasi Monte Carlo 
 Quasi Monte Carlo (QMC), is method of producing samples similar to those generated via Monte Carlo (MC).
@@ -22,11 +22,13 @@ There also is an algorithm for Halton Sampling, that constructs builds samples f
 To sample using one of these methods, simply create an instance of the corresponding struct with the desired parameters and then call the sample function with that structs instance. The parameters are `n::Integer` which is the number of samples, and `randomization::Symbol` which encodes the randomization method that should be used. The different possible symbols are: `:none`, `:matousekscramble`, `:owenscramble`, `:shift` and `:randomizedhalton`.
 
 ```@example QMC
-    using UncertaintyQuantification #hide
+    using UncertaintyQuantification    #hide
+
     x = RandomVariable(Uniform(), :x)
     qmc = LatinHypercubeSampling(100, :shift)
     samples = sample(x, qmc)
-    nothing #hide
+
+    nothing    #hide
 ```
 
 Note that not all randomization methods are possible to use for every QMC-method. 
@@ -35,7 +37,8 @@ Also, if no `randomization`-symbol is given, the default will be used. This is `
 ```@example QMC
     x = RandomVariable(Uniform(), :x)
     samples = sample(x, LatinHypercubeSampling(100))
-    nothing #hide
+    
+    nothing    #hide
 ```
 
 When chosing `n`, bear in mind that for `SobolSampling` and `FaureSampling`, `n` must fit the base that is used for creating the respective sequence. For `SobolSampling` the base is always equal to 2 while it depends on the number of input-variables for `FaureSampling`. If `n` is not a power of the base, it will automatically be increased to the next power.

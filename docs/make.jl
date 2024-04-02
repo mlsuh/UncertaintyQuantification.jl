@@ -24,10 +24,12 @@ makedocs(
             "Reliability Analysis" => "manual/reliability.md",
             "Metamodelling" => "manual/metamodels.md",
             "High Performance Computing" => "manual/hpc.md",
+            "Simulations" => "manual/simulations.md",
         ],
         "Examples" => [
             "Metamodels" => "examples/metamodels.md",
             "High Performance Computing" => "examples/hpc.md",
+            "Simulations" => "examples/simulations.md",
         ],
         "API" => [
             "Inputs" => "api/inputs.md",
