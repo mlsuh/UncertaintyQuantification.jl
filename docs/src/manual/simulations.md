@@ -6,9 +6,9 @@ The Monte-Carlo (MC) method is a method of sampling random numbers that dates ba
 It is used in Random Number Generators which generally produce pseudo random numbers.
 
 ## Quasi Monte Carlo 
-Quasi Monte Carlo (QMC), is method of producing samples similar to those generated via Monte Carlo (MC).
-The difference being, that QMC samples are generated deterministically in way to ensure they are evenly distributed across the sampling space, not forming clutters or voids as MC samples might.
-This makes QMC more efficient than MC for lots of applications since fewer samples are needed in order to produce a sufficient density of samples throughout. There are multiple ways of QMC-sampling which either are digital nets or lattices. [owenQuasiMonteCarlo2009](@cite)
+Quasi Monte Carlo (QMC), is a method of producing samples similar to those generated via Monte Carlo (MC).
+The difference being that QMC samples are generated deterministically in a way to ensure they are evenly distributed across the sampling space, not forming clutters or voids as MC samples might.
+This makes QMC more efficient than MC for lots of applications since fewer samples are needed in order to produce a sufficient density of samples throughout. There are multiple ways of QMC-sampling which can be classified as either digital nets or lattices. [owenQuasiMonteCarlo2009](@cite)
 
 Included here are Lattice Rule Sampling and the digital nets Sobol Sampling, Halton Sampling, Faure Sampling and Latin Haypercube Sampling.
 
@@ -19,7 +19,7 @@ There are several randomization methods, useful in different cases, depending on
 Implemented in this package are Owen-Scramble and Matousek-Scramble, two similar methods useful for Sobol and Faure Sampling aswell as Shift which can be used for Lattice Rule Sampling.
 There also is an algorithm for Halton Sampling, that constructs builds samples from the ground up as opposed to randomizing existing samples which is what the aforementioned methods do. [owenRandomizedHalton2017](@cite)
 
-To sample using one of these methods, simply create an instance of the corresponding struct with the desired parameters and then call the sample function with that structs instance. The parameters are `n::Integer` which is the number of samples, and `randomization::Symbol` which encodes the randomization method that should be used. The different possible symbols are: `:none`, `:matousekscramble`, `:owenscramble`, `:shift` and `:randomizedhalton`.
+To sample using one of these methods, simply create an instance of the corresponding struct with the desired parameters and then call the sample function with this instance. The parameters are `n::Integer` which is the number of samples, and `randomization::Symbol` which encodes the randomization method that should be used. The different possible symbols are: `:none`, `:matousekscramble`, `:owenscramble`, `:shift` and `:randomizedhalton`.
 
 ```@example QMC
     using UncertaintyQuantification    #hide
@@ -41,7 +41,7 @@ Also, if no `randomization`-symbol is given, the default will be used. This is `
     nothing    #hide
 ```
 
-When chosing `n`, bear in mind that for `SobolSampling` and `FaureSampling`, `n` must fit the base that is used for creating the respective sequence. For `SobolSampling` the base is always equal to 2 while it depends on the number of input-variables for `FaureSampling`. If `n` is not a power of the base, it will automatically be increased to the next power.
+When chosing `n`, bear in mind that for `SobolSampling` and `FaureSampling`, `n` must fit the base that is used for creating the respective sequence. For `SobolSampling` the base is always equal to 2 while for `FaureSampling`, it depends on the number of input-variables. If `n` is not a power of the base, it will automatically be increased to the next power.
 
 ```@example QMC
     x = RandomVariable(Uniform(), :x)
